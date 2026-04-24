@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>FreeControl · Control por gestos y sonidos</title>
+  <!-- Google Fonts & Font Awesome Icons -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="estilos.css">
+</head>
+<body>
+<div class="app-container">
+
+  <!-- DASHBOARD SECTION (oculto inicialmente) -->
+  <div id="dashboardSection" class="dashboard-container">
+    <div class="glass-card">
+      <div class="dash-header">
+        <div class="welcome-text">
+          <h2 id="greetingUser">Perfil: <span id="userNameSpan">Usuario</span></h2>
+          <p><i class="fas fa-magic"></i> Interacción manos libres · Gestos + voz</p>
+        </div>
+        <button id="sesionBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cambiar Perfil</button>
+        <button id="logoutBtn" class="btn-logout"><i class="fas fa-sign-out-alt"></i> Cerrar sesión</button>
+      </div>
+
+      <!-- Botones principales de acción (Configurar gestos / Historial) -->
+      <div class="actions-grid">
+        <div class="action-card" id="configGestosBtn">
+          <i class="fas fa-sliders-h"></i>
+          <h3>Configurar gestos</h3>
+          <p>Asocia movimientos de mano, cabeza o sonidos a acciones del sistema</p>
+        </div>
+
+        <div class="action-card info-card" id="resumenPerfilCard">
+          <i class="fas fa-chart-pie"></i>
+          <h3>Resumen del Perfil</h3>
+          <div class="stats-mini-list">
+            <p><i class="fas fa-hand-paper"></i> Gestos: <strong id="countGestos">0</strong></p>
+            <p><i class="fas fa-microphone"></i> Sonidos: <strong id="countSonidos">0</strong></p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sección informativa: gestos predeterminados + actividad reciente (mock estilo real) -->
+      <div class="info-split">
+        <!-- Panel de gestos predefinidos (inspirado en MediaPipe) -->
+        <div class="info-panel">
+          <h4><i class="fas fa-hand-peace"></i> Gestos & Comandos</h4>
+          <ul id="listaGestosReal" class="gesture-list"></ul>
+        </div>
+
+        <!-- Panel de actividad reciente (simula historial) -->
+        <div class="info-panel">
+          <h4><i class="fas fa-microphone-alt"></i> Comandos de Voz</h4>
+          <ul id="listaSonidosReal" class="gesture-list"></ul> 
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

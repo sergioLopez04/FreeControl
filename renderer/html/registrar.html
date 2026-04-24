@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeControl · Registro</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div class="app-container">
+  <div class="register-card glass-card">
+    <div class="logo-icon">
+      <i class="fas fa-user-plus"></i>
+    </div>
+    <h1>Crear cuenta</h1>
+    <div class="tagline">Únete a FreeControl y olvida el teclado</div>
+
+    <div class="input-group">
+      <label><i class="fas fa-user"></i> Usuario</label>
+      <input type="text" id="username" class="input-field" placeholder="Ej: sergio_lopez">
+    </div>
+    <div class="input-group">
+      <label><i class="fas fa-envelope"></i> Email</label>
+      <input type="email" id="email" class="input-field" placeholder="tu@email.com">
+    </div>
+    <div class="input-group">
+      <label><i class="fas fa-lock"></i> Contraseña</label>
+      <input type="password" id="password" class="input-field" placeholder="Mínimo 6 caracteres">
+    </div>
+
+    <!-- ✅ onclick restaurado -->
+    <button onclick="register()" class="btn-primary"><i class="fas fa-check-circle"></i> Crear cuenta</button>
+
+    <p id="msg" class="info-message"></p>
+    <p>¿Ya tienes cuenta? <a href="login.html" class="text-link">Inicia sesión</a></p>
+  </div>
+</div>
+<script src="../js/registrar.js"></script>
+</body>
+</html>

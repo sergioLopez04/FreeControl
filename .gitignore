@@ -1,0 +1,11 @@
+# modelos de IA (muy pesados)
+ggml-tiny.bin
+
+# node modules
+node_modules/
+
+# logs
+*.log
+
+/release
+*.dll

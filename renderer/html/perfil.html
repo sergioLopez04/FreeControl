@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FreeControl · Perfiles</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  <link rel="stylesheet" href="../estilos.css">
+</head>
+<body>
+<div class="app-container">
+  <div class="glass-card perfiles-container">
+    <div class="logo-icon">
+      <i class="fas fa-users"></i>
+    </div>
+    <h1>¿Quién está usando FreeControl?</h1>
+    <div class="tagline">Selecciona un perfil o crea uno nuevo</div>
+
+    <div id="perfiles" class="perfiles-grid">
+      <!-- Los perfiles se cargarán dinámicamente con JS -->
+    </div>
+
+    <button id="crearPerfilBtn" class="btn-secondary"><i class="fas fa-plus"></i> Crear perfil</button>
+    <p id="msg" class="info-message"></p>
+  </div>
+</div>
+
+<!-- Modal para crear perfil -->
+<div id="modal" class="modal">
+  <div class="modal-content">
+    <h2><i class="fas fa-id-card"></i> Nuevo perfil</h2>
+    <input type="text" id="nombrePerfilInput" class="input-field" placeholder="Nombre del perfil (ej: Trabajo, Casa)">
+    <div class="modal-buttons">
+      <button id="guardarPerfilBtn" class="btn-primary">Guardar</button>
+      <button id="cancelarModalBtn" class="btn-secondary">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<script src="../js/perfil.js"></script>
+</body>
+</html>
