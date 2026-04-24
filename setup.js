@@ -4,9 +4,12 @@ const https = require("https");
 const { exec } = require("child_process");
 
 // 🔗 URLs
-const MODEL_URL = "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/ggml-tiny.bin";
-const RELEASE_URL = "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/release.zip";
-const NODE_MODULES_URL = "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/node_modules.zip";
+const MODEL_URL =
+  "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/ggml-tiny.bin";
+const RELEASE_URL =
+  "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/release.zip";
+const NODE_MODULES_URL =
+  "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/node_modules.zip";
 
 // 📁 Paths
 const MODEL_PATH = path.join(__dirname, "ggml-tiny.bin");
@@ -22,19 +25,29 @@ function download(url, dest) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(dest);
 
-    https.get(url, (res) => {
-      if (res.statusCode !== 200) {
-        reject(new Error(`Download failed: ${res.statusCode}`));
-        return;
-      }
+    const request = (url) => {
+      https
+        .get(url, (res) => {
+          // 🔁 REDIRECT (CLAVE)
+          if (res.statusCode === 301 || res.statusCode === 302) {
+            return request(res.headers.location);
+          }
 
-      res.pipe(file);
+          if (res.statusCode !== 200) {
+            reject(new Error("Download failed: " + res.statusCode));
+            return;
+          }
 
-      file.on("finish", () => {
-        file.close(() => resolve());
-      });
+          res.pipe(file);
 
-    }).on("error", reject);
+          file.on("finish", () => {
+            file.close(resolve);
+          });
+        })
+        .on("error", reject);
+    };
+
+    request(url);
   });
 }
 
@@ -48,7 +61,7 @@ function unzip(zipPath, dest) {
       (err) => {
         if (err) return reject(err);
         resolve();
-      }
+      },
     );
   });
 }
@@ -58,7 +71,6 @@ function unzip(zipPath, dest) {
 // -------------------------
 async function setup() {
   try {
-
     // =====================
     // 1. MODELO
     // =====================
@@ -97,7 +109,6 @@ async function setup() {
     }
 
     console.log("SETUP COMPLETO");
-
   } catch (err) {
     console.error("Error en setup:", err);
   }
