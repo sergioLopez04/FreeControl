@@ -4,10 +4,10 @@ const https = require("https");
 const { exec } = require("child_process");
 
 const MODEL_URL = "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/ggml-tiny.bin";
-const RELEASE_URL = "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/release.rar";
+const RELEASE_URL = "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/release.zip";
 
 const MODEL_PATH = path.join(__dirname, "ggml-tiny.bin");
-const RELEASE_ZIP = path.join(__dirname, "release.rar");
+const RELEASE_ZIP = path.join(__dirname, "release.zip");
 const RELEASE_FOLDER = path.join(__dirname, "release");
 const EXE_PATH = path.join(RELEASE_FOLDER, "whisper-cli.exe");
 
