@@ -1,5 +1,4 @@
 const ipcRenderer = window.electronAPI;
-
 const usuario = JSON.parse(localStorage.getItem("usuario"));
 
 if (!usuario) {
@@ -11,9 +10,8 @@ const usuarioId = usuario.id_usuario;
 
 async function cargarPerfiles() {
   const perfiles = await ipcRenderer.invoke("obtenerPerfiles", usuarioId);
-
-  const container = document.getElementById("perfiles");
-  const btnCrear = document.getElementById("crearPerfilBtn");
+  const container = document.getElementById("contenedorPerfiles");
+  const btnCrear = document.getElementById("botonCrearPerfil");
 
   container.innerHTML = "";
 
@@ -30,43 +28,35 @@ async function cargarPerfiles() {
 }
 
 function abrirModal() {
-  document.getElementById("modal").classList.add("show");
+  document.getElementById("modalCrearPerfil").classList.add("show");
 }
 
 async function crearPerfil() {
-  const nombre = document.getElementById("nombrePerfilInput").value;
-
+  const nombre = document.getElementById("entradaNombrePerfil").value;
   if (!nombre) return;
 
   await ipcRenderer.invoke("crearPerfil", usuarioId, nombre);
 
-  document.getElementById("nombrePerfilInput").value = "";
-  document.getElementById("modal").classList.remove("show");
+  document.getElementById("entradaNombrePerfil").value = "";
+  document.getElementById("modalCrearPerfil").classList.remove("show");
   cargarPerfiles();
 }
 
 function seleccionarPerfil(id, nombre) {
   localStorage.setItem("perfilActivo", id);
   localStorage.setItem("perfilNombre", nombre);
-
   window.location.href = "../index.html";
 }
 
 function cerrarModal() {
-  document.getElementById("modal").classList.remove("show");
-  document.getElementById("nombrePerfilInput").value = ""; // Limpiamos lo que el usuario haya escrito
+  document.getElementById("modalCrearPerfil").classList.remove("show");
+  document.getElementById("entradaNombrePerfil").value = "";
 }
 
 window.addEventListener("DOMContentLoaded", () => {
-  document
-    .getElementById("crearPerfilBtn")
-    .addEventListener("click", abrirModal);
-  document
-    .getElementById("guardarPerfilBtn")
-    .addEventListener("click", crearPerfil);
-  document
-    .getElementById("cancelarModalBtn")
-    .addEventListener("click", cerrarModal);
+  document.getElementById("botonCrearPerfil").addEventListener("click", abrirModal);
+  document.getElementById("botonGuardarPerfil").addEventListener("click", crearPerfil);
+  document.getElementById("botonCancelarModal").addEventListener("click", cerrarModal);
 });
 
 cargarPerfiles();

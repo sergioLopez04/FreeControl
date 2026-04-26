@@ -9,32 +9,31 @@
   <link rel="stylesheet" href="../estilos.css">
 </head>
 <body>
-<div class="app-container">
-  <div class="register-card glass-card">
-    <div class="logo-icon">
+<div class="contenedor-app">
+  <div class="tarjeta-registro tarjeta-cristal">
+    <div class="icono-logo">
       <i class="fas fa-user-plus"></i>
     </div>
     <h1>Crear cuenta</h1>
-    <div class="tagline">Únete a FreeControl y olvida el teclado</div>
+    <div class="eslogan">Únete a FreeControl y olvida el teclado</div>
 
-    <div class="input-group">
+    <div class="grupo-input">
       <label><i class="fas fa-user"></i> Usuario</label>
-      <input type="text" id="username" class="input-field" placeholder="Ej: sergio_lopez">
+      <input type="text" id="nombreUsuario" class="campo-entrada" placeholder="Ej: sergio_lopez">
     </div>
-    <div class="input-group">
+    <div class="grupo-input">
       <label><i class="fas fa-envelope"></i> Email</label>
-      <input type="email" id="email" class="input-field" placeholder="tu@email.com">
+      <input type="email" id="correo" class="campo-entrada" placeholder="tu@email.com">
     </div>
-    <div class="input-group">
+    <div class="grupo-input">
       <label><i class="fas fa-lock"></i> Contraseña</label>
-      <input type="password" id="password" class="input-field" placeholder="Mínimo 6 caracteres">
+      <input type="password" id="contrasena" class="campo-entrada" placeholder="Mínimo 6 caracteres">
     </div>
 
-    <!-- ✅ onclick restaurado -->
-    <button onclick="register()" class="btn-primary"><i class="fas fa-check-circle"></i> Crear cuenta</button>
+    <button onclick="register()" class="boton-primario"><i class="fas fa-check-circle"></i> Crear cuenta</button>
 
-    <p id="msg" class="info-message"></p>
-    <p>¿Ya tienes cuenta? <a href="login.html" class="text-link">Inicia sesión</a></p>
+    <p id="mensajeInfo" class="mensaje-info"></p>
+    <p>¿Ya tienes cuenta? <a href="login.html" class="enlace-texto">Inicia sesión</a></p>
   </div>
 </div>
 <script src="../js/registrar.js"></script>

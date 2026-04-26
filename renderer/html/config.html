@@ -4,78 +4,64 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FreeControl · Configuración de IA</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
     <link rel="stylesheet" href="../estilos.css" />
   </head>
   <body>
-    <div class="app-container">
-      <a href="../index.html" class="btn-regresar">
+    <div class="contenedor-app">
+      <a href="../index.html" class="boton-regresar">
         <i class="fas fa-arrow-left"></i> Volver al Panel
       </a>
-      <button id="btnAyuda" class="btn-ayuda" type="button">
+      <button id="botonAyuda" class="boton-ayuda" type="button">
         <i class="fas fa-question-circle"></i> Ayuda
       </button>
 
-      <div class="glass-card config-main-card">
-        <div class="logo-icon">
+      <div class="tarjeta-cristal tarjeta-configuracion-principal">
+        <div class="icono-logo">
           <i class="fas fa-robot"></i>
         </div>
         <h1>Configuración de IA</h1>
-        <p class="tagline">Entrena gestos y sonidos para controlar tu PC</p>
+        <p class="eslogan">Entrena gestos y sonidos para controlar tu PC</p>
 
-        <div class="config-section">
-          <div class="input-group-row">
-            <select id="selectorCamara" class="input-field"></select>
-            <button id="btnIniciar" class="btn-primary">
+        <div class="seccion-configuracion">
+          <div class="grupo-input-fila">
+            <select id="selectorCamara" class="campo-entrada"></select>
+            <button id="botonIniciar" class="boton-primario">
               <i class="fas fa-video"></i> 1. Iniciar Sensores
             </button>
           </div>
         </div>
 
-        <div class="steps-container">
-          <div class="step-box">
+        <div class="contenedor-pasos">
+          <div class="caja-paso">
             <h3><i class="fas fa-hand-paper"></i> Gestos de Mano</h3>
 
             <label>Crear Nuevo Gesto</label>
-            <div class="input-group-row">
-              <input
-                type="text"
-                id="nombreGestoNuevo"
-                class="input-field"
-                placeholder="Ej: Mano_Spider"
-              />
-              <button id="btnCapturar" class="btn-primary btn-capture">
+            <div class="grupo-input-fila">
+              <input type="text" id="nombreGestoNuevo" class="campo-entrada" placeholder="Ej: Mano_Spider" />
+              <button id="botonCapturar" class="boton-primario boton-capturar">
                 <i class="fas fa-camera"></i> Grabar
               </button>
             </div>
 
-            <div class="select-stack">
+            <div class="pila-selectores">
               <label>Vincular a Acción</label>
-              <select id="selectorGestos" class="input-field"></select>
-              <select id="selectorAcciones" class="input-field"></select>
+              <select id="selectorGestos" class="campo-entrada"></select>
+              <select id="selectorAcciones" class="campo-entrada"></select>
             </div>
 
-            <button id="btnAsignar" class="btn-secondary btn-save">
+            <button id="botonAsignar" class="boton-secundario boton-guardar">
               <i class="fas fa-save"></i> Guardar Vínculo
             </button>
           </div>
 
-          <div class="step-box">
+          <div class="caja-paso">
             <h3><i class="fas fa-comment-dots"></i> Comandos de Voz</h3>
 
-            <div class="ptt-container">
-              <label
-                ><i class="fas fa-keyboard"></i> Tecla para Hablar
-                (Push-to-Talk):</label
-              >
-              <select id="selectPTTKey" class="input-field">
+            <div class="contenedor-pulsar-hablar">
+              <label><i class="fas fa-keyboard"></i> Tecla para Hablar (Push-to-Talk):</label>
+              <select id="selectTeclaPushToTalk" class="campo-entrada">
                 <option value="F2">F2</option>
                 <option value="F4">F4</option>
                 <option value="F8">F8</option>
@@ -86,30 +72,28 @@
               <p>Pulsa la tecla designada para activar el micro y hablar.</p>
             </div>
 
-            <div class="select-stack">
+            <div class="pila-selectores">
               <label>Vincular Frase a Acción</label>
-              <select id="selectorSonidos" class="input-field"></select>
-              <select id="selectorAccionesSonido" class="input-field"></select>
+              <select id="selectorSonidos" class="campo-entrada"></select>
+              <select id="selectorAccionesSonido" class="campo-entrada"></select>
             </div>
 
-            <button id="btnAsignarSonido" class="btn-secondary btn-save">
+            <button id="botonAsignarSonido" class="boton-secundario boton-guardar">
               <i class="fas fa-save"></i> Guardar Vínculo de Voz
             </button>
 
-            <!-- <hr style="margin: 15px 0; border: 0; border-top: 1px solid #444" /> -->
-
-            <button id="btnEscucharVoz" class="btn-primary">
+            <button id="botonEscucharVoz" class="boton-primario">
               <i class="fas fa-microphone"></i>
-              <span id="txtEscuchar">Iniciar Escucha</span>
+              <span id="textoEscuchar">Iniciar Escucha</span>
             </button>
           </div>
         </div>
 
-        <div class="camera-viewer">
+        <div class="visor-camara">
           <video id="video" autoplay playsinline></video>
           <canvas id="canvas"></canvas>
 
-          <div id="estado" class="status-badge">
+          <div id="estado" class="insignia-estado">
             <i class="fas fa-info-circle"></i> Esperando inicio...
           </div>
         </div>
@@ -120,92 +104,44 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
     <script src="../js/config.js"></script>
 
-    <div id="welcomeModal" class="modal-overlay" style="display: none">
-      <div class="modal-content">
-        <div class="modal-header">
+    <div id="modalBienvenida" class="superposicion-modal" style="display: none">
+      <div class="contenido-modal">
+        <div class="cabecera-modal">
           <i class="fas fa-rocket"></i>
           <h2>Guía Rápida de FreeControl</h2>
         </div>
 
-        <div class="modal-body">
+        <div class="cuerpo-modal">
           <div class="guia-columnas">
             <div class="columna-guia">
-              <div class="col-header">
+              <div class="cabecera-columna">
                 <i class="fas fa-hand-paper"></i>
                 <h3>Sistema de Gestos</h3>
               </div>
               <div class="guia-pasos">
-                <div class="paso">
-                  <span>1</span>
-                  <p>
-                    <b>Activación:</b> Enciende la cámara. Asegúrate de que el
-                    indicador de estado cambie a "Activo".
-                  </p>
-                </div>
-                <div class="paso">
-                  <span>2</span>
-                  <p>
-                    <b>Captura:</b> Realiza el movimiento frente a la lente y
-                    pulsa <b>"Grabar Gesto"</b> para que la IA lo aprenda.
-                  </p>
-                </div>
-                <div class="paso">
-                  <span>3</span>
-                  <p>
-                    <b>Vinculación:</b> Asigna una acción (tecla, acceso directo
-                    o script) al gesto grabado.
-                  </p>
-                </div>
-                <div class="paso final">
-                  <i class="fas fa-play"></i>
-                  <p>
-                    <b>Uso:</b> El sistema detectará el patrón en tiempo real y
-                    ejecutará la acción.
-                  </p>
-                </div>
+                <div class="paso"><span>1</span><p><b>Activación:</b> Enciende la cámara. Asegúrate de que el indicador de estado cambie a "Activo".</p></div>
+                <div class="paso"><span>2</span><p><b>Captura:</b> Realiza el movimiento frente a la lente y pulsa <b>"Grabar Gesto"</b> para que la IA lo aprenda.</p></div>
+                <div class="paso"><span>3</span><p><b>Vinculación:</b> Asigna una acción (tecla, acceso directo o script) al gesto grabado.</p></div>
+                <div class="paso final"><i class="fas fa-play"></i><p><b>Uso:</b> El sistema detectará el patrón en tiempo real y ejecutará la acción.</p></div>
               </div>
             </div>
-
             <div class="columna-guia">
-              <div class="col-header">
+              <div class="cabecera-columna">
                 <i class="fas fa-microphone"></i>
                 <h3>Comandos de Voz</h3>
               </div>
               <div class="guia-pasos">
-                <div class="paso">
-                  <span>1</span>
-                  <p>
-                    <b>Escucha:</b> Pulsa el botón de micrófono y di la frase o
-                    comando que quieras utilizar.
-                  </p>
-                </div>
-                <div class="paso">
-                  <span>2</span>
-                  <p>
-                    <b>Procesado:</b> El motor transcribirá tu voz.
-                  </p>
-                </div>
-                <div class="paso">
-                  <span>3</span>
-                  <p>
-                    <b>Asignación:</b> Vincula esa frase a una respuesta del
-                    sistema en tu configuración.
-                  </p>
-                </div>
-                <div class="paso final">
-                  <i class="fas fa-volume-up"></i>
-                  <p>
-                    <b>Uso:</b> Di el comando en cualquier momento para activar
-                    el control por voz.
-                  </p>
-                </div>
+                <div class="paso"><span>1</span><p><b>Escucha:</b> Pulsa el botón de micrófono y di la frase o comando que quieras utilizar.</p></div>
+                <div class="paso"><span>2</span><p><b>Procesado:</b> El motor transcribirá tu voz.</p></div>
+                <div class="paso"><span>3</span><p><b>Asignación:</b> Vincula esa frase a una respuesta del sistema en tu configuración.</p></div>
+                <div class="paso final"><i class="fas fa-volume-up"></i><p><b>Uso:</b> Di el comando en cualquier momento para activar el control por voz.</p></div>
               </div>
             </div>
           </div>
         </div>
 
-        <div class="modal-footer">
-          <button id="closeWelcome" class="btn-entendido">¡Entendido!</button>
+        <div class="pie-modal">
+          <button id="cerrarBienvenida" class="boton-entendido">¡Entendido!</button>
         </div>
       </div>
     </div>

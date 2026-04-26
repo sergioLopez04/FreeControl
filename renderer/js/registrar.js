@@ -1,18 +1,16 @@
 const ipcRenderer = window.electronAPI;
 
 async function register() {
-  const username = document.getElementById('username').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const nombreUsuario = document.getElementById('nombreUsuario').value;
+  const correo = document.getElementById('correo').value;
+  const contrasena = document.getElementById('contrasena').value;
 
   try {
-    await ipcRenderer.invoke("register", username, email, password);
-
+    await ipcRenderer.invoke("register", nombreUsuario, correo, contrasena);
     alert("Usuario creado");
     window.location.href = "login.html";
-
   } catch (err) {
     console.log("ERROR:", err);
-    document.getElementById('msg').innerText = "Error al registrar";
+    document.getElementById('mensajeInfo').innerText = "Error al registrar";
   }
 }

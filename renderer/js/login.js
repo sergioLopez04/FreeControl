@@ -1,13 +1,12 @@
 window.login = async function () {
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+  const correo = document.getElementById('correo').value;
+  const contrasena = document.getElementById('contrasena').value;
 
   try {
-    const results = await window.electronAPI.invoke("login", email, password);
+    const results = await window.electronAPI.invoke("login", correo, contrasena);
 
     if (results.length > 0) {
       localStorage.setItem("usuario", JSON.stringify(results[0]));
-
       window.location.href = "perfil.html";
     } else {
       alert("Usuario incorrecto");
