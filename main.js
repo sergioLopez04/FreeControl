@@ -33,6 +33,7 @@ function createWindow() {
   mainWindow.loadFile("renderer/html/login.html");
 }
 
+// Ventana independiente para configuración
 function createConfigWindow() {
   const win = new BrowserWindow({
     width: 1200,
@@ -53,16 +54,17 @@ function createConfigWindow() {
 
 app.commandLine.appendSwitch("lang", "es-ES");
 
-// --- FUNCIÓN DE LIMPIEZA (Ponla fuera del ipcMain) ---
+// --- FUNCIÓN DE LIMPIEZA ---
 function normalizarTexto(texto) {
   return texto
     .toLowerCase()
-    .replace(/[.,!¡?¿]/g, "") // Quita signos
-    .replace(/(.)\1+/g, "$1") // Quita letras repetidas (google -> gogle)
+    .replace(/[.,!¡?¿]/g, "")
+    .replace(/(.)\1+/g, "$1")
     .trim();
 }
 
 ipcMain.on("procesar-audio-whisper", (event, audioData) => {
+  // Guardamos el audio temporalmente
   const rutaAudio = path.join(__dirname, "prueba.wav");
   fs.writeFileSync(rutaAudio, Buffer.from(audioData));
 
@@ -77,6 +79,7 @@ ipcMain.on("procesar-audio-whisper", (event, audioData) => {
 
     if (!fraseVoz || fraseVoz.length < 2) return;
 
+    // Buscamos en la BD si la frase dicha coincide con algún comando de voz configurado
     const sql = `
     SELECT a.comando, s.descripcion, s.id_sonido
     FROM sonido s
@@ -94,19 +97,17 @@ ipcMain.on("procesar-audio-whisper", (event, audioData) => {
       for (const row of rows) {
         const fraseBD = (row.descripcion || "").toLowerCase().trim();
         const palabrasBD = fraseBD.split(" ");
-        const palabraClaveBD = palabrasBD[palabrasBD.length - 1]; // "gogle"
+        const palabraClaveBD = palabrasBD[palabrasBD.length - 1];
 
-        const palabrasVoz = fraseVoz.split(" "); // Lo que has dicho: ["abre", "el", "goble"]
+        const palabrasVoz = fraseVoz.split(" ");
 
-        // COMPROBACIÓN CHAPUZA:
-        // Buscamos si ALGUNA palabra de lo que has dicho empieza igual que la palabra clave de la BD
         const coincide =
-          palabrasVoz.some(
-            (palabra) => palabra.startsWith(palabraClaveBD.substring(0, 2)), // Si empieza por "go"
+          palabrasVoz.some((palabra) =>
+            palabra.startsWith(palabraClaveBD.substring(0, 2)),
           ) || fraseVoz.includes(fraseBD);
 
         if (coincide) {
-          encontrado = true; // Marcamos que existe para que NO lo inserte otra vez
+          encontrado = true; // Marcamos que existe para que no lo inserte otra vez
           if (row.comando) {
             ejecutarAccionReal(row.comando);
             break;
@@ -116,6 +117,7 @@ ipcMain.on("procesar-audio-whisper", (event, audioData) => {
         }
       }
 
+      // Si no se encontró, guardamos la frase como nuevo comando de voz
       if (!encontrado) {
         // --- EVITAR DUPLICADOS ---
         db.query(
@@ -151,7 +153,7 @@ ipcMain.on("set-perfil-activo", (event, perfilId) => {
   perfilActual = perfilId;
 });
 
-// --- FUNCIÓN MAESTRA DE EJECUCIÓN (NUT.JS) ---
+// --- EJECUCIÓN DE ACCIONES ---
 async function ejecutarAccionReal(comando) {
   if (!comando) return;
   console.log("Ejecutando comando:", comando);
@@ -281,12 +283,10 @@ function registrarAccesoRapido(tecla) {
   }
 }
 
-// Busca donde tienes el ipcMain.on("configurar-ptt" ...)
+// Configuración de la tecla Push-to-Talk
 ipcMain.on("configurar-ptt", (e, tecla) => {
   globalShortcut.unregisterAll();
   globalShortcut.register(tecla, () => {
-    // CAMBIO AQUÍ: En lugar de "getFocusedWindow", usamos "mainWindow"
-    // que es la variable donde guardaste tu ventana al principio.
     if (mainWindow && !mainWindow.isDestroyed()) {
       mainWindow.webContents.send("ptt-activar");
     }
@@ -294,6 +294,7 @@ ipcMain.on("configurar-ptt", (e, tecla) => {
 });
 app.on("will-quit", () => globalShortcut.unregisterAll());
 
+// ========== MANEJADORES DE BASE DE DATOS ==========
 ipcMain.handle("login", async (event, email, password) => {
   try {
     if (!email || !password) return [];
@@ -458,27 +459,6 @@ ipcMain.on("abrir-configuracion", () => {
   createConfigWindow();
 });
 
-// --- SCRIPT DE TEST AUTOMÁTICO ---
-ipcMain.on("ejecutar-test-completo", async () => {
-  const accionesATestear = ["VOL_UP"];
-
-  console.log("🚀 Iniciando Test Automático de 29 acciones...");
-
-  for (const cmd of accionesATestear) {
-    console.log(`🧪 Probando: ${cmd}`);
-
-    // Ejecutamos la acción
-    await ejecutarAccionReal(cmd);
-
-    // Esperamos 2 segundos entre cada una para que te dé tiempo a ver qué pasa
-    await new Promise((resolve) => setTimeout(resolve, 2000));
-  }
-
-  console.log(
-    "✅ Test completado. Revisa si todas las acciones hicieron lo que debían.",
-  );
-});
-
 
 ipcMain.handle("obtener-viculos-dashboard", async (event, perfilId) => {
   return new Promise((resolve) => {
@@ -489,7 +469,7 @@ ipcMain.handle("obtener-viculos-dashboard", async (event, perfilId) => {
       JOIN Gesto g ON pga.id_gesto = g.id_gesto
       JOIN Accion a ON pga.id_accion = a.id_accion
       WHERE pga.id_perfil = ?`;
-    
+
     db.query(sql, [perfilId], (err, rows) => {
       if (err) {
         console.error(err);
@@ -501,26 +481,32 @@ ipcMain.handle("obtener-viculos-dashboard", async (event, perfilId) => {
   });
 });
 
-// 2. Actualizar un vínculo existente
-ipcMain.handle("actualizar-vinculo-real", async (event, { perfilId, gestoId, accionId }) => {
-  return new Promise((resolve) => {
-    // Usamos el id_gesto e id_perfil para encontrar la fila y cambiar la accion
-    const sql = `UPDATE Perfil_Gesto_Accion SET id_accion = ? WHERE id_perfil = ? AND id_gesto = ?`;
-    db.query(sql, [accionId, perfilId, gestoId], (err, result) => {
-      resolve({ success: !err });
+// Actualizar un vínculo existente
+ipcMain.handle(
+  "actualizar-vinculo-real",
+  async (event, { perfilId, gestoId, accionId }) => {
+    return new Promise((resolve) => {
+      // Usamos el id_gesto e id_perfil para encontrar la fila y cambiar la accion
+      const sql = `UPDATE Perfil_Gesto_Accion SET id_accion = ? WHERE id_perfil = ? AND id_gesto = ?`;
+      db.query(sql, [accionId, perfilId, gestoId], (err, result) => {
+        resolve({ success: !err });
+      });
     });
-  });
-});
+  },
+);
 
-// 3. Eliminar un vínculo
-ipcMain.handle("eliminar-vinculo-real", async (event, { perfilId, gestoId }) => {
-  return new Promise((resolve) => {
-    const sql = `DELETE FROM Perfil_Gesto_Accion WHERE id_perfil = ? AND id_gesto = ?`;
-    db.query(sql, [perfilId, gestoId], (err, result) => {
-      resolve({ success: !err });
+// Eliminar un vínculo
+ipcMain.handle(
+  "eliminar-vinculo-real",
+  async (event, { perfilId, gestoId }) => {
+    return new Promise((resolve) => {
+      const sql = `DELETE FROM Perfil_Gesto_Accion WHERE id_perfil = ? AND id_gesto = ?`;
+      db.query(sql, [perfilId, gestoId], (err, result) => {
+        resolve({ success: !err });
+      });
     });
-  });
-});
+  },
+);
 
 // Para obtener los vínculos de sonido del perfil actual
 ipcMain.handle("obtener-vinculos-sonido-dashboard", async (event, perfilId) => {
@@ -532,7 +518,7 @@ ipcMain.handle("obtener-vinculos-sonido-dashboard", async (event, perfilId) => {
       JOIN Sonido s ON psa.id_sonido = s.id_sonido
       JOIN Accion a ON psa.id_accion = a.id_accion
       WHERE psa.id_perfil = ?`;
-    
+
     db.query(sql, [perfilId], (err, rows) => {
       if (err) resolve([]);
       else resolve(rows);
@@ -540,35 +526,40 @@ ipcMain.handle("obtener-vinculos-sonido-dashboard", async (event, perfilId) => {
   });
 });
 
-// Actualizar el vínculo de sonido (cambiar la acción de una frase)
-ipcMain.handle("actualizar-vinculo-sonido-real", async (event, { perfilId, sonidoId, accionId }) => {
-  return new Promise((resolve) => {
-    // Usamos UPDATE para modificar la fila existente en lugar de crear una nueva
-    const sql = `UPDATE perfil_sonido_accion SET id_accion = ? WHERE id_perfil = ? AND id_sonido = ?`;
-    
-    db.query(sql, [accionId, perfilId, sonidoId], (err, result) => {
-      if (err) {
-        console.error("Error en SQL:", err);
-        resolve({ success: false });
-      } else {
-        resolve({ success: true });
-      }
+// Actualizar el vínculo de sonido
+ipcMain.handle(
+  "actualizar-vinculo-sonido-real",
+  async (event, { perfilId, sonidoId, accionId }) => {
+    return new Promise((resolve) => {
+      // Usamos UPDATE para modificar la fila existente en lugar de crear una nueva
+      const sql = `UPDATE perfil_sonido_accion SET id_accion = ? WHERE id_perfil = ? AND id_sonido = ?`;
+
+      db.query(sql, [accionId, perfilId, sonidoId], (err, result) => {
+        if (err) {
+          console.error("Error en SQL:", err);
+          resolve({ success: false });
+        } else {
+          resolve({ success: true });
+        }
+      });
     });
-  });
-});
+  },
+);
 
 // Para eliminar un vínculo de sonido
-ipcMain.handle("eliminar-vinculo-sonido-real", async (event, { perfilId, sonidoId }) => {
-  return new Promise((resolve) => {
-    const sql = `DELETE FROM Perfil_Sonido_Accion WHERE id_perfil = ? AND id_sonido = ?`;
-    db.query(sql, [perfilId, sonidoId], (err) => {
-      resolve({ success: !err });
+ipcMain.handle(
+  "eliminar-vinculo-sonido-real",
+  async (event, { perfilId, sonidoId }) => {
+    return new Promise((resolve) => {
+      const sql = `DELETE FROM Perfil_Sonido_Accion WHERE id_perfil = ? AND id_sonido = ?`;
+      db.query(sql, [perfilId, sonidoId], (err) => {
+        resolve({ success: !err });
+      });
     });
-  });
-});
+  },
+);
 
-
-ipcMain.handle('contar-todo-perfil', async (event, id_usuario) => {
+ipcMain.handle("contar-todo-perfil", async (event, id_usuario) => {
   return new Promise((resolve) => {
     // Contamos gestos y sonidos vinculados a este perfil
     const sql = `

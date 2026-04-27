@@ -1,3 +1,4 @@
+// Elementos del DOM
 const loginDiv = document.getElementById("loginSection");
 const dashboardDiv = document.getElementById("seccionDashboard");
 
@@ -14,7 +15,6 @@ const userNameSpan = document.getElementById("textoNombreUsuario");
 const greetingUserSpan = document.getElementById("saludoUsuario");
 
 const configBtn = document.getElementById("botonConfigurarGestos");
-const historialBtn = document.getElementById("historialBtn");
 
 const perfilActivo = localStorage.getItem("perfilActivo");
 const perfilNombre = localStorage.getItem("perfilNombre");
@@ -26,6 +26,7 @@ window.addEventListener("DOMContentLoaded", () => {
   }
 });
 
+// ========== LOGIN ==========
 async function performLogin() {
   const email = usernameInput.value.trim();
   const password = passwordInput.value.trim();
@@ -35,6 +36,7 @@ async function performLogin() {
     const usuario = resultado[0];
     localStorage.setItem("usuario", JSON.stringify(usuario));
     localStorage.setItem("perfilNombre", usuario.nombre_usuario);
+    // Mostramos el dashboard y ocultamos el login
     loginDiv.style.display = "none";
     dashboardDiv.style.display = "block";
     renderizarListaGestos();
@@ -59,16 +61,14 @@ function openConfiguracion() {
   window.location.href = "html/config.html";
 }
 
-function openHistorial() {
-  alert("Historial de gestos");
-}
 
+// Asignación de eventos
 if (loginBtn) loginBtn.addEventListener("click", performLogin);
 if (logoutBtn) logoutBtn.addEventListener("click", performLogout);
 if (sesionBtn) sesionBtn.addEventListener("click", cambiarPerfil);
 if (configBtn) configBtn.addEventListener("click", openConfiguracion);
-if (historialBtn) historialBtn.addEventListener("click", openHistorial);
 
+// Enter en el formulario de login
 if (usernameInput && passwordInput) {
   [usernameInput, passwordInput].forEach((input) => {
     input.addEventListener("keypress", (e) => {
@@ -77,6 +77,7 @@ if (usernameInput && passwordInput) {
   });
 }
 
+// ========== RENDERIZADO DINÁMICO DE GESTOS Y SONIDOS EN EL DASHBOARD ==========
 async function renderizarListaGestos() {
   const listaUL = document.getElementById("listaGestosAsignados");
   if (!listaUL) return;
@@ -119,6 +120,7 @@ async function renderizarListaGestos() {
       </div>
     `;
 
+    // Guardar cambios en la acción vinculada al gesto
     li.querySelector(".boton-accion-guardar").onclick = async () => {
       const select = li.querySelector(".selector-editar-accion");
       const nombreAccion = select.options[select.selectedIndex].text;
@@ -135,6 +137,7 @@ async function renderizarListaGestos() {
       }
     };
 
+    // Eliminar el vínculo gesto-acción
     li.querySelector(".boton-accion-eliminar").onclick = async () => {
       if (!confirm(`¿Eliminar acción: ${item.nombre_accion}?`)) return;
       const res = await window.electronAPI.invoke("eliminar-vinculo-real", {
@@ -152,6 +155,7 @@ async function renderizarListaGestos() {
   });
 }
 
+// Similar para los comandos de voz
 async function renderizarListaSonidos() {
   const listaUL = document.getElementById("listaSonidosAsignados");
   if (!listaUL) return;
@@ -221,6 +225,7 @@ async function renderizarListaSonidos() {
   });
 }
 
+// Actualiza los contadores de gestos y sonidos en el dashboard
 async function actualizarContadores() {
   const usuario = JSON.parse(localStorage.getItem("usuario"));
   if (!usuario) return;

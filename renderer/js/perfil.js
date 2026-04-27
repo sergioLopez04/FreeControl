@@ -1,6 +1,7 @@
 const ipcRenderer = window.electronAPI;
 const usuario = JSON.parse(localStorage.getItem("usuario"));
 
+// Si no hay usuario logueado, redirigimos al login
 if (!usuario) {
   alert("No hay usuario logueado");
   window.location.href = "../html/login.html";
@@ -8,6 +9,7 @@ if (!usuario) {
 
 const usuarioId = usuario.id_usuario;
 
+// Carga la lista de perfiles desde la base de datos
 async function cargarPerfiles() {
   const perfiles = await ipcRenderer.invoke("obtenerPerfiles", usuarioId);
   const container = document.getElementById("contenedorPerfiles");
@@ -15,6 +17,7 @@ async function cargarPerfiles() {
 
   container.innerHTML = "";
 
+  // Creamos un div por cada perfil (estilo tarjeta)
   perfiles.forEach((p) => {
     const div = document.createElement("div");
     div.innerText = p.nombre_perfil;
@@ -22,6 +25,7 @@ async function cargarPerfiles() {
     container.appendChild(div);
   });
 
+  // Máximo 4 perfiles por usuario
   if (perfiles.length >= 4) {
     btnCrear.style.display = "none";
   }
@@ -42,6 +46,7 @@ async function crearPerfil() {
   cargarPerfiles();
 }
 
+// Guardamos el perfil activo para usarlo en toda la app
 function seleccionarPerfil(id, nombre) {
   localStorage.setItem("perfilActivo", id);
   localStorage.setItem("perfilNombre", nombre);
@@ -53,10 +58,17 @@ function cerrarModal() {
   document.getElementById("entradaNombrePerfil").value = "";
 }
 
+// Eventos al cargar la página
 window.addEventListener("DOMContentLoaded", () => {
-  document.getElementById("botonCrearPerfil").addEventListener("click", abrirModal);
-  document.getElementById("botonGuardarPerfil").addEventListener("click", crearPerfil);
-  document.getElementById("botonCancelarModal").addEventListener("click", cerrarModal);
+  document
+    .getElementById("botonCrearPerfil")
+    .addEventListener("click", abrirModal);
+  document
+    .getElementById("botonGuardarPerfil")
+    .addEventListener("click", crearPerfil);
+  document
+    .getElementById("botonCancelarModal")
+    .addEventListener("click", cerrarModal);
 });
 
 cargarPerfiles();
