@@ -24,6 +24,7 @@
         <h1>Configuración de IA</h1>
         <p class="eslogan">Entrena gestos y sonidos para controlar tu PC</p>
 
+        <!-- Selector de cámara y botón iniciar (arriba, a ancho completo) -->
         <div class="seccion-configuracion">
           <div class="grupo-input-fila">
             <select id="selectorCamara" class="campo-entrada"></select>
@@ -33,7 +34,9 @@
           </div>
         </div>
 
-        <div class="contenedor-pasos">
+        <!-- DISPOSICIÓN DE DOS COLUMNAS: GESTOS | CÁMARA -->
+        <div class="disposicion-gestos-camara">
+          <!-- Columna izquierda: solo Gestos de Mano -->
           <div class="caja-paso">
             <h3><i class="fas fa-hand-paper"></i> Gestos de Mano</h3>
 
@@ -41,7 +44,7 @@
             <div class="grupo-input-fila">
               <input type="text" id="nombreGestoNuevo" class="campo-entrada" placeholder="Ej: Mano_Spider" />
               <button id="botonCapturar" class="boton-primario boton-capturar">
-                <i class="fas fa-camera"></i> Grabar
+                <i class="fas fa-camera"></i> Capturar Gesto
               </button>
             </div>
 
@@ -56,6 +59,18 @@
             </button>
           </div>
 
+          <!-- Columna derecha: visor de cámara -->
+          <div class="visor-camara">
+            <video id="video" autoplay playsinline></video>
+            <canvas id="canvas"></canvas>
+            <div id="estado" class="insignia-estado">
+              <i class="fas fa-info-circle"></i> Esperando inicio...
+            </div>
+          </div>
+        </div>
+
+        <!-- SECCIÓN DE VOZ (ancha, debajo) -->
+        <div class="seccion-voz">
           <div class="caja-paso">
             <h3><i class="fas fa-comment-dots"></i> Comandos de Voz</h3>
 
@@ -88,15 +103,6 @@
             </button>
           </div>
         </div>
-
-        <div class="visor-camara">
-          <video id="video" autoplay playsinline></video>
-          <canvas id="canvas"></canvas>
-
-          <div id="estado" class="insignia-estado">
-            <i class="fas fa-info-circle"></i> Esperando inicio...
-          </div>
-        </div>
       </div>
     </div>
 
@@ -104,13 +110,13 @@
     <script src="https://cdn.jsdelivr.net/npm/@mediapipe/drawing_utils/drawing_utils.js"></script>
     <script src="../js/config.js"></script>
 
+    <!-- Modal de ayuda (sin cambios) -->
     <div id="modalBienvenida" class="superposicion-modal" style="display: none">
       <div class="contenido-modal">
         <div class="cabecera-modal">
           <i class="fas fa-rocket"></i>
           <h2>Guía Rápida de FreeControl</h2>
         </div>
-
         <div class="cuerpo-modal">
           <div class="guia-columnas">
             <div class="columna-guia">
@@ -120,7 +126,7 @@
               </div>
               <div class="guia-pasos">
                 <div class="paso"><span>1</span><p><b>Activación:</b> Enciende la cámara. Asegúrate de que el indicador de estado cambie a "Activo".</p></div>
-                <div class="paso"><span>2</span><p><b>Captura:</b> Realiza el movimiento frente a la lente y pulsa <b>"Grabar Gesto"</b> para que la IA lo aprenda.</p></div>
+                <div class="paso"><span>2</span><p><b>Captura:</b> Realiza el movimiento frente a la lente y pulsa <b>"Capturar Gesto"</b> para que la IA lo aprenda.</p></div>
                 <div class="paso"><span>3</span><p><b>Vinculación:</b> Asigna una acción (tecla, acceso directo o script) al gesto grabado.</p></div>
                 <div class="paso final"><i class="fas fa-play"></i><p><b>Uso:</b> El sistema detectará el patrón en tiempo real y ejecutará la acción.</p></div>
               </div>
@@ -139,7 +145,6 @@
             </div>
           </div>
         </div>
-
         <div class="pie-modal">
           <button id="cerrarBienvenida" class="boton-entendido">¡Entendido!</button>
         </div>
