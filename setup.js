@@ -3,7 +3,7 @@ const path = require("path");
 const https = require("https");
 const { exec } = require("child_process");
 
-// 🔗 URLs
+// URLs
 const MODEL_URL =
   "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/ggml-tiny.bin";
 const RELEASE_URL =
@@ -19,7 +19,7 @@ const NODE_MODULES_ZIP = path.join(__dirname, "node_modules.zip");
 const NODE_MODULES_FOLDER = path.join(__dirname, "node_modules");
 
 // -------------------------
-// 🔽 DESCARGA ROBUSTA
+// DESCARGA ROBUSTA
 // -------------------------
 function download(url, dest) {
   return new Promise((resolve, reject) => {
@@ -28,7 +28,7 @@ function download(url, dest) {
     const request = (url) => {
       https
         .get(url, (res) => {
-          // 🔁 REDIRECT (CLAVE)
+          
           if (res.statusCode === 301 || res.statusCode === 302) {
             return request(res.headers.location);
           }
@@ -52,7 +52,7 @@ function download(url, dest) {
 }
 
 // -------------------------
-// 📦 UNZIP ZIP
+// UNZIP
 // -------------------------
 function unzip(zipPath, dest) {
   return new Promise((resolve, reject) => {
@@ -67,7 +67,7 @@ function unzip(zipPath, dest) {
 }
 
 // -------------------------
-// 🚀 SETUP PRINCIPAL
+// SETUP PRINCIPAL
 // -------------------------
 async function setup() {
   try {
