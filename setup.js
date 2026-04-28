@@ -11,7 +11,7 @@ const RELEASE_URL =
 const NODE_MODULES_URL =
   "https://github.com/sergioLopez04/FreeControl/releases/download/Whisper/node_modules.zip";
 
-// 📁 Paths
+// Rutas
 const MODEL_PATH = path.join(__dirname, "ggml-tiny.bin");
 const RELEASE_ZIP = path.join(__dirname, "release.zip");
 const RELEASE_FOLDER = path.join(__dirname, "release");
